@@ -19,7 +19,7 @@
             return fn.apply(this,arguments);
         };
 	};
-	Function.prototype.q1Throttle = function(time, cb){ /* cb useful? */
+	Function.prototype.q1Wait = function(time, cb){ /* cb useful? */
 		var fn = this;
 		var timeout = null;
 		return function(){
@@ -32,7 +32,7 @@
 			}, time);
 		};
 	};
-	Function.prototype.q1Wait = function(min,max){ // waits for the execution of the function (min) and then executes the last call, but waits maximal (max) millisecunds
+	Function.prototype.q1Throttle = function(min,max){ // waits for the execution of the function (min) and then executes the last call, but waits maximal (max) millisecunds
         var fn = this, minTimer, maxTimer, inst, args
         ,wait = function(){
             clearTimeout(maxTimer)
@@ -57,7 +57,8 @@ console.log(maxtimer)
 		};
 	};
 	*/
-
+	
+	
 	/* polyfils */
 	if(!String.prototype.trim){
 		String.prototype.trim = function(){
@@ -123,7 +124,7 @@ console.log(maxtimer)
 	}	
 	*/
 	
-	q1.Eventer = {
+	q1.Events = {
 	    initEvent : function(n){
 	        !this._Es && (this._Es={});
 	        !this._Es[n] && (this._Es[n]=[]);
@@ -156,9 +157,10 @@ console.log(maxtimer)
 	    	}
 	    }
 	};
-	
+
 	/* rect */
 	q1.rect = function(obj){
+		if (!(this instanceof q1.rect)) return new q1.rect(obj);
 		this.x = obj.x || 0;
 		this.y = obj.y || 0;
 		this.w = obj.w || 0;
@@ -169,15 +171,13 @@ console.log(maxtimer)
         ,r:function(){ return this.x + this.w; }
         ,b:function(){ return this.y + this.h; }
         //,relative:function(rct){ return new $.tct(this.x-rct.x,this.y-rct.y,this.w,this.h); }
-        ,isInX: function(rct){ rct.x > this.x && rct.r() < this.r(); }
-        ,isInY: function(rct){ rct.y > this.y && rct.r() < this.r(); }
+        ,isInX: function(rct){ return rct.x > this.x && rct.r() < this.r(); }
+        ,isInY: function(rct){ return rct.y > this.y && rct.b() < this.b(); }
         ,isIn: function(rct){ return this.isInX(rct) && this.isInY(rct); }
         ,touchesX: function(rct){ return rct.x < this.r() && rct.r() > this.x; }
         ,touchesY: function(rct){ return rct.y < this.b() && rct.b() > this.y; }
         ,touches: function(rct){ return this.touchesX(rct) && this.touchesY(rct); }
         ,grow: function(value){ this.x += value; this.y += value; this.w += value; this.h += value; }
 	};
-	
-	
 	
 }();
